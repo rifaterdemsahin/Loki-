@@ -113,7 +113,7 @@ To solve the issue of the port not being accessible, you can try the following s
 1. Check if Loki is actually listening on port 3100:
    - Look for a log entry indicating that Loki is listening on a specific port.
    - If you don't see such a log, ensure that your Loki configuration specifies the correct port.
-   ![alt text](image.png)
+   ![alt text](/Images/loki-listen-port.png)
 
 2. Verify Codespaces port forwarding:
    - In your Codespaces environment, go to the "Ports" tab.
