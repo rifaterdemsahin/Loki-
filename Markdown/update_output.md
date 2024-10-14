@@ -19,3 +19,4 @@ cd Images
 
 7. 🚀 **Push to Remote**  
     Push the committed changes to the remote repository.
+    
