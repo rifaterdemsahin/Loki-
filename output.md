@@ -1,15 +1,38 @@
-Git Download
-![Git Download](/Images/Loki-GitOver-CodeSpaces.png)
+# Images
 
-Port Visibility
-![Port Visbility](/Images/Port-visibility.png)
+## 🐱 Loki GitOver CodeSpaces
+![Loki GitOver CodeSpaces](1_Loki-GitOver-CodeSpaces.png)
 
-Port Forwarding
-![Port Forwarding](/Images/Port-forwarding.png)
+## 🌐 Port visibility
+![Port visibility](2_Port-visibility.png)
 
-Loki Written With Go
-![Loki and Go](/Images/loki-written-with-go.png)
+## 🔄 Port forwarding
+![Port forwarding](3_port-forwarding.png)
 
+## 📝 Loki written with Go
+![Loki written with Go](4_loki-written-with-go.png)
 
-Loki Listen Port
-![Loki Listen Port](/Images/loki-listen-port.png)
+## 🎧 Loki listen port
+![Loki listen port](6_loki-listen-port.png)
+
+## 📊 Loki Grafana component
+![Loki Grafana component](5_loki-grafana-component.png)
+
+## 🖧 Docker network
+![Docker network](7_docker-network.png)
+
+## 🔄 Docker restart
+![Docker restart](8_docker-restart.png)
+
+## 🔄 Pivot to Minikube from Docker
+![Pivot to Minikube from Docker](9_pivot-to-minikube-from-docker.png)
+
+## 🚗 Minikube autodriver Loki
+![Minikube autodriver Loki](10_minikube-autodriver-loki.png)
+
+## 🔄 Leftside your port, rightside container port
+![Leftside your port, rightside container port](11_leftsideyourport-rightsidecontainerport.png)
+
+## 📈 Metrics path
+![Metrics path](12_metrics-path.png)
+
