@@ -108,6 +108,33 @@ level=info ts=2024-10-14T16:48:02.066424231Z caller=compactor.go:433 msg="waitin
 level=info ts=2024-10-14T16:48:07.040362979Z caller=frontend_scheduler_worker.go:101 msg="adding connection to scheduler" addr=172.17.0.2:9095
 level=info ts=2024-10-14T16:48:56.877804292Z caller=table_manager.go:134 msg="uploading tables"
 level=info ts=2024-10-14T16:48:56.877815367Z caller=table_manager.go:166 msg="handing over indexes to shipper"
-```
-Review the logs for any errors or warnings that might indicate why the port is not accessible. If the logs do not show any issues, ensure that the Codespaces environment is correctly configured to expose port 3100.
-```
+To solve the issue of the port not being accessible, you can try the following steps:
+
+1. Check if Loki is actually listening on port 3100:
+   - Look for a log entry indicating that Loki is listening on a specific port.
+   - If you don't see such a log, ensure that your Loki configuration specifies the correct port.
+
+2. Verify Codespaces port forwarding:
+   - In your Codespaces environment, go to the "Ports" tab.
+   - Check if port 3100 is listed and forwarded.
+   - If not, add a new port forward for 3100.
+
+3. Check for firewall or security group issues:
+   - Ensure that your Codespaces environment allows incoming traffic on port 3100.
+
+4. Confirm Loki's network binding:
+   - Make sure Loki is binding to 0.0.0.0 or the appropriate network interface, not just localhost.
+
+5. Restart Loki:
+   - If you've made configuration changes, restart the Loki service to apply them.
+
+6. Check for port conflicts:
+   - Ensure no other service is using port 3100.
+
+7. Review Loki's configuration:
+   - Double-check your Loki configuration file to ensure the correct port is specified.
+
+8. Use netstat or ss command:
+   - Run `netstat -tuln | grep 3100` or `ss -tuln | grep 3100` to see if the port is actually open and listening.
+
+If these steps don't resolve the issue, you may need to provide more detailed logs or configuration files for further troubleshooting.
