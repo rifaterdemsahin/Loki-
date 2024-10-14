@@ -19,14 +19,14 @@ This implementation involves setting up GitHub Codespaces as a development envir
 -----
 ## 📝 Structure
 
-✅🎯 RealJob → Real Job implemented with Objectives and Key Results
-🔄🌐 RealEnvironments → Multiple ways to get it done
-🖼️📸 Imaginary → Images / Screencaptures of the implementation
-📝🤖 FormulasMarkdown → GPT output of the steps
-💻👨‍💻 SymbolCode → Implementation Code
-🗺️📊 SymbolMap → Mermaid diagrams showing concepts
-⚠️🔧 SemblanceErrors → Output of Errors and Resolutions
-🚀🔍 JouisanceJourney → Different implementation paths
+- ✅🎯 RealJob → Real Job implemented with Objectives and Key Results
+- 🔄🌐 RealEnvironments → Multiple ways to get it done
+- 🖼️📸 Imaginary → Images / Screencaptures of the implementation
+- 📝🤖 FormulasMarkdown → GPT output of the steps
+- 💻👨‍💻 SymbolCode → Implementation Code
+- 🗺️📊 SymbolMap → Mermaid diagrams showing concepts
+- ⚠️🔧 SemblanceErrors → Output of Errors and Resolutions
+- 🚀🔍 JouisanceJourney → Different implementation paths
 ----
 
 ## 🔗 Connect with Me
