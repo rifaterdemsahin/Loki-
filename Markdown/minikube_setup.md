@@ -72,7 +72,45 @@ To convert your setup to a Minikube implementation on GitHub Codespaces, you can
    minikube config set memory 4096
    minikube config set cpus 2
    minikube start
+
+   ### 5️⃣ Verify the Setup
+
+   Ensure that Loki is running correctly by visiting the Loki metrics page:
+
+   - **URL:** `http://localhost:3100/metrics`
+
+   You should see metrics reflecting logs being ingested.
+
+   ### 6️⃣ Connect Grafana for Visualization (Optional)
+
+   To visualize logs more effectively, set up **Grafana** and link it to Loki as a data source:
+
+   ```bash
+   helm install grafana grafana/grafana --namespace monitoring
+   kubectl port-forward --namespace monitoring svc/grafana 3000:80
    ```
+
+   - **Access Grafana at:** `http://localhost:3000`
+   - **Add Loki as a data source:** Use the URL `http://localhost:3100` for the Loki instance.
+
+   ---
+
+   ## 🎯 Result
+
+   By completing this setup, Loki will be running in your Minikube cluster, allowing you to efficiently track logs from your containerized applications.
+
+   ---
+
+   ## 🚀 Next Steps
+
+   - Optimize the **log scraping configurations**.
+   - Explore **alerting mechanisms** for critical logs.
+   - Integrate Loki into your **CI/CD pipeline** for automated monitoring during development.
+
+   ---
+
+
+
 
 By following these steps, you should have Loki running inside Minikube on GitHub Codespaces, with proper port forwarding and configuration adjustments.
 
