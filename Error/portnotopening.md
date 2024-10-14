@@ -1,0 +1,113 @@
+After i ran 
+```markdown
+docker run -d --name loki -p 3100:3100 grafana/loki:2.7.0
+
+I get this error in code spaces:
+
+404 page not found
+https://friendly-trout-7w5g6j4p452pvqj-3100.app.github.dev/
+
+This error occurs because the port 3100 is not properly exposed or mapped in the Codespaces environment. Ensure that the port is correctly configured and accessible.
+
+To resolve this issue, follow these steps:
+
+1. **Expose the Port in Codespaces:**
+    - Open your Codespace.
+    - Go to the Ports tab.
+    - Ensure that port 3100 is listed.
+    - Set the visibility of port 3100 to "Public".
+
+2. **Check Docker Run Command:**
+    - Ensure that your Docker run command correctly maps the port:
+      ```sh
+      docker run -d --name loki -p 3100:3100 grafana/loki:2.7.0
+      ```
+
+3. **Verify Access:**
+    - After starting the container, verify that you can access Loki by navigating to the URL provided by Codespaces, which should look something like:
+      ```
+      https://<your-codespace-id>-3100.app.github.dev/
+      ```
+
+If you still encounter issues, check the Docker container logs for any errors and ensure that Loki is running correctly inside the container.
+
+```markdown
+To further diagnose the issue, you can check the logs of the Loki container to see if there are any errors or warnings that might indicate why the port is not accessible. Use the following command to view the logs:
+
+```sh
+docker logs --tail 1000 -f ad7df2afcc73b98a09c28c0fe7d68a06cd0aac41cf62e64158f80aad58dd9dcd
+```
+
+Here is an example of what the logs might look like:
+
+```
+level=info ts=2024-10-14T16:47:56.874527463Z caller=main.go:103 msg="Starting Loki" version="(version=2.7.0, branch=HEAD, revision=1b627d880)"
+level=info ts=2024-10-14T16:47:56.874971695Z caller=server.go:323 http=[::]:3100 grpc=[::]:9095 msg="server listening on addresses"
+level=warn ts=2024-10-14T16:47:56.877186479Z caller=cache.go:114 msg="fifocache config is deprecated. use embedded-cache instead"
+level=warn ts=2024-10-14T16:47:56.877205543Z caller=experimental.go:20 msg="experimental feature in use" feature="In-memory (FIFO) cache - chunksembedded-cache"
+level=info ts=2024-10-14T16:47:56.877545474Z caller=table_manager.go:134 msg="uploading tables"
+level=info ts=2024-10-14T16:47:56.877551484Z caller=table_manager.go:262 msg="query readiness setup completed" duration=1.232µs distinct_users_len=0
+level=info ts=2024-10-14T16:47:56.877570223Z caller=shipper.go:127 msg="starting index shipper in RW mode"
+level=info ts=2024-10-14T16:47:56.877724603Z caller=shipper_index_client.go:78 msg="starting boltdb shipper in RW mode"
+level=info ts=2024-10-14T16:47:56.877794695Z caller=table_manager.go:166 msg="handing over indexes to shipper"
+level=info ts=2024-10-14T16:47:56.878307505Z caller=mapper.go:47 msg="cleaning up mapped rules directory" path=/loki/rules-temp
+level=info ts=2024-10-14T16:47:56.879178136Z caller=worker.go:112 msg="Starting querier worker using query-scheduler and scheduler ring for addresses"
+level=info ts=2024-10-14T16:47:56.888522455Z caller=module_service.go:82 msg=initialising module=server
+level=info ts=2024-10-14T16:47:56.888611232Z caller=module_service.go:82 msg=initialising module=cache-generation-loader
+level=info ts=2024-10-14T16:47:56.888852495Z caller=module_service.go:82 msg=initialising module=query-frontend-tripperware
+level=info ts=2024-10-14T16:47:56.888869689Z caller=module_service.go:82 msg=initialising module=memberlist-kv
+level=info ts=2024-10-14T16:47:56.88890645Z caller=module_service.go:82 msg=initialising module=store
+level=info ts=2024-10-14T16:47:56.888917127Z caller=module_service.go:82 msg=initialising module=ring
+level=info ts=2024-10-14T16:47:56.888994216Z caller=ring.go:263 msg="ring doesn't exist in KV store yet"
+level=info ts=2024-10-14T16:47:56.889028223Z caller=client.go:255 msg="value is nil" key=collectors/ring index=1
+level=info ts=2024-10-14T16:47:56.889046281Z caller=module_service.go:82 msg=initialising module=usage-report
+level=info ts=2024-10-14T16:47:56.889090495Z caller=module_service.go:82 msg=initialising module=ingester-querier
+level=info ts=2024-10-14T16:47:56.889175993Z caller=module_service.go:82 msg=initialising module=query-scheduler
+level=info ts=2024-10-14T16:47:56.889235859Z caller=ring.go:263 msg="ring doesn't exist in KV store yet"
+level=info ts=2024-10-14T16:47:56.889261478Z caller=client.go:255 msg="value is nil" key=collectors/scheduler index=1
+level=info ts=2024-10-14T16:47:56.889286473Z caller=module_service.go:82 msg=initialising module=ingester
+level=info ts=2024-10-14T16:47:56.889299095Z caller=ingester.go:417 msg="recovering from checkpoint"
+level=info ts=2024-10-14T16:47:56.889337093Z caller=recovery.go:39 msg="no checkpoint found, treating as no-op"
+level=info ts=2024-10-14T16:47:56.889363194Z caller=module_service.go:82 msg=initialising module=distributor
+level=info ts=2024-10-14T16:47:56.88940414Z caller=module_service.go:82 msg=initialising module=ruler
+level=info ts=2024-10-14T16:47:56.889416686Z caller=ruler.go:441 msg="ruler up and running"
+level=info ts=2024-10-14T16:47:56.889462018Z caller=module_service.go:82 msg=initialising module=compactor
+level=info ts=2024-10-14T16:47:56.889501937Z caller=ring.go:263 msg="ring doesn't exist in KV store yet"
+level=info ts=2024-10-14T16:47:56.889527338Z caller=client.go:255 msg="value is nil" key=collectors/compactor index=1
+level=info ts=2024-10-14T16:47:56.889587691Z caller=basic_lifecycler.go:261 msg="instance not found in the ring" instance=ad7df2afcc73 ring=scheduler
+level=info ts=2024-10-14T16:47:56.88959678Z caller=basic_lifecycler_delegates.go:63 msg="not loading tokens from file, tokens file path is empty"
+level=info ts=2024-10-14T16:47:56.889672754Z caller=lifecycler.go:547 msg="not loading tokens from file, tokens file path is empty"
+level=info ts=2024-10-14T16:47:56.889695704Z caller=lifecycler.go:576 msg="instance not found in ring, adding with no tokens" ring=distributor
+level=info ts=2024-10-14T16:47:56.889750887Z caller=lifecycler.go:416 msg="auto-joining cluster after timeout" ring=distributor
+level=info ts=2024-10-14T16:47:56.889849693Z caller=basic_lifecycler.go:261 msg="instance not found in the ring" instance=ad7df2afcc73 ring=compactor
+level=info ts=2024-10-14T16:47:56.889858548Z caller=basic_lifecycler_delegates.go:63 msg="not loading tokens from file, tokens file path is empty"
+level=info ts=2024-10-14T16:47:56.889883491Z caller=ingester.go:433 msg="recovered WAL checkpoint recovery finished" elapsed=589.734µs errors=false
+level=info ts=2024-10-14T16:47:56.889893809Z caller=ingester.go:439 msg="recovering from WAL"
+level=info ts=2024-10-14T16:47:56.889927553Z caller=compactor.go:325 msg="waiting until compactor is JOINING in the ring"
+level=info ts=2024-10-14T16:47:56.889935108Z caller=compactor.go:329 msg="compactor is JOINING in the ring"
+level=info ts=2024-10-14T16:47:56.889944337Z caller=scheduler.go:617 msg="waiting until scheduler is JOINING in the ring"
+level=info ts=2024-10-14T16:47:56.889951505Z caller=scheduler.go:621 msg="scheduler is JOINING in the ring"
+level=info ts=2024-10-14T16:47:56.889969419Z caller=compactor.go:339 msg="waiting until compactor is ACTIVE in the ring"
+level=info ts=2024-10-14T16:47:56.890013896Z caller=scheduler.go:631 msg="waiting until scheduler is ACTIVE in the ring"
+level=info ts=2024-10-14T16:47:56.890048226Z caller=ingester.go:455 msg="WAL segment recovery finished" elapsed=754.469µs errors=false
+level=info ts=2024-10-14T16:47:56.890057919Z caller=ingester.go:403 msg="closing recoverer"
+level=info ts=2024-10-14T16:47:56.890064483Z caller=ingester.go:411 msg="WAL recovery finished" time=770.112µs
+level=info ts=2024-10-14T16:47:56.890081437Z caller=wal.go:156 msg=started component=wal
+level=info ts=2024-10-14T16:47:56.890107901Z caller=lifecycler.go:547 msg="not loading tokens from file, tokens file path is empty"
+level=info ts=2024-10-14T16:47:56.890127902Z caller=lifecycler.go:576 msg="instance not found in ring, adding with no tokens" ring=ingester
+level=info ts=2024-10-14T16:47:56.890161798Z caller=lifecycler.go:416 msg="auto-joining cluster after timeout" ring=ingester
+level=info ts=2024-10-14T16:47:57.039508359Z caller=scheduler.go:635 msg="scheduler is ACTIVE in the ring"
+level=info ts=2024-10-14T16:47:57.039583814Z caller=module_service.go:82 msg=initialising module=query-frontend
+level=info ts=2024-10-14T16:47:57.039600618Z caller=module_service.go:82 msg=initialising module=querier
+level=info ts=2024-10-14T16:47:57.065671605Z caller=compactor.go:343 msg="compactor is ACTIVE in the ring"
+level=info ts=2024-10-14T16:47:57.065729888Z caller=loki.go:399 msg="Loki started"
+level=info ts=2024-10-14T16:48:00.040631874Z caller=scheduler.go:682 msg="this scheduler is in the ReplicationSet, will now accept requests."
+level=info ts=2024-10-14T16:48:00.040651767Z caller=worker.go:209 msg="adding connection" addr=172.17.0.2:9095
+level=info ts=2024-10-14T16:48:02.066358572Z caller=compactor.go:404 msg="this instance has been chosen to run the compactor, starting compactor"
+level=info ts=2024-10-14T16:48:02.066424231Z caller=compactor.go:433 msg="waiting 10m0s for ring to stay stable and previous compactions to finish before starting compactor"
+level=info ts=2024-10-14T16:48:07.040362979Z caller=frontend_scheduler_worker.go:101 msg="adding connection to scheduler" addr=172.17.0.2:9095
+level=info ts=2024-10-14T16:48:56.877804292Z caller=table_manager.go:134 msg="uploading tables"
+level=info ts=2024-10-14T16:48:56.877815367Z caller=table_manager.go:166 msg="handing over indexes to shipper"
+```
+Review the logs for any errors or warnings that might indicate why the port is not accessible. If the logs do not show any issues, ensure that the Codespaces environment is correctly configured to expose port 3100.
+```
