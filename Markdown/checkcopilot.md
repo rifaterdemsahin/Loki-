@@ -1,4 +1,3 @@
-```markdown
 # Images
 
 ![Loki GitOver CodeSpaces](../Images/Loki-GitOver-CodeSpaces.png)
