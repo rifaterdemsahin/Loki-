@@ -71,6 +71,7 @@ To convert your setup to a Minikube implementation on GitHub Codespaces, you can
    ```bash
    minikube config set memory 4096
    minikube config set cpus 2
+   minikube start
    ```
 
 By following these steps, you should have Loki running inside Minikube on GitHub Codespaces, with proper port forwarding and configuration adjustments.
