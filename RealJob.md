@@ -17,7 +17,7 @@ Implement a lightweight, efficient log aggregation system using Loki within GitH
 This implementation involves setting up GitHub Codespaces as a development environment, installing Loki and Promtail using Docker for log aggregation, and optionally linking Grafana for visualization. The Proof of Concept (PoC) serves as a template for future development environments requiring quick and efficient log monitoring, aiming to track and analyze logs without the need for extensive indexing. The next steps include refining log configurations, adding alerting mechanisms, and integrating with CI/CD pipelines for automated monitoring.
 
 -----
-## 📝 Structure
+## 📝 Structure and Order of HandsOn
 
 - ✅🎯 RealJob → Real Job implemented with Objectives and Key Results
 - 🔄🌐 RealEnvironments → Multiple ways to get it done
