@@ -1,4 +1,5 @@
-kubectl delete pod loki-01 -n monitoring
+kubectl get  pods -n monitoring
+kubectl delete pod loki-0 -n monitoring
 
 ### Why Deletion is Needed
 

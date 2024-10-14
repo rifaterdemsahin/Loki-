@@ -3,23 +3,29 @@ To check if `auth_enabled: false` is set in a running Loki instance on Minikube,
 ### 1. Access the Loki Pod:
 First, identify the Loki pod running inside your Minikube cluster.
 
-- List all the pods in your namespace (replace `<namespace>` with the correct namespace if needed, or omit if using the default):
+- List all the pods in the `monitoring` namespace:
 
-   ```bash
-   kubectl get pods -n <namespace>
-   ```
+    ```bash
+    kubectl get pods -n monitoring
+    ```
+
+@rifaterdemsahin ➜ /workspaces/loki (main) $ kubectl get pods -n monitoring
+NAME                       READY   STATUS    RESTARTS      AGE
+grafana-59fb4f95f7-rkzwp   1/1     Running   0             40m
+loki-0                     1/1     Running   2 (67m ago)   104m
+loki-promtail-x7hvz        1/1     Running   1 (69m ago)   104m
 
 - Find the Loki pod in the list, and then access it using:
 
-   ```bash
-   kubectl exec -it <pod_name> -n <namespace> -- /bin/sh
-   ```
+    ```bash
+    kubectl exec -it loki-0  -n monitoring -- /bin/sh
+    ```
 
-   or if Bash is available:
+    or if Bash is available:
 
-   ```bash
-   kubectl exec -it <pod_name> -n <namespace> -- /bin/bash
-   ```
+    ```bash
+    kubectl exec -it <pod_name> -n monitoring -- /bin/bash
+    ```
 
 ### 2. Locate the Configuration File:
 Once inside the Loki pod, you need to locate the `config.yaml` file, which stores the Loki configuration. Typically, it might be located in one of the following paths:
@@ -60,7 +66,7 @@ exit
 If you modified the configuration file, restart the Loki pod to apply the changes:
 
 ```bash
-kubectl delete pod <pod_name> -n <namespace>
+kubectl delete pod <pod_name> -n monitoring
 ```
 
 Kubernetes will automatically recreate the pod with the updated configuration.
