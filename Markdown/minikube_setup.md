@@ -89,6 +89,9 @@ To convert your setup to a Minikube implementation on GitHub Codespaces, you can
    helm install grafana grafana/grafana --namespace monitoring
    kubectl port-forward --namespace monitoring svc/grafana 3000:80
    ```
+- Password
+
+- kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 
    - **Access Grafana at:** `http://localhost:3000`
    - **Add Loki as a data source:** Use the URL `http://localhost:3100` for the Loki instance.
