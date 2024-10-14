@@ -123,6 +123,13 @@ To solve the issue of the port not being accessible, you can try the following s
 3. Check for firewall or security group issues:
    - Ensure that your Codespaces environment allows incoming traffic on port 3100.
 
+   @rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+ad7df2afcc73   grafana/loki:2.7.0   "/usr/bin/loki -conf…"   15 minutes ago   Up 15 minutes   0.0.0.0:3100->3100/tcp, :::3100->3100/tcp   loki3
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ 
+
+
+
 4. Confirm Loki's network binding:
    - Make sure Loki is binding to 0.0.0.0 or the appropriate network interface, not just localhost.
 
@@ -138,4 +145,222 @@ To solve the issue of the port not being accessible, you can try the following s
 8. Use netstat or ss command:
    - Run `netstat -tuln | grep 3100` or `ss -tuln | grep 3100` to see if the port is actually open and listening.
 
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ netstat -tuln | grep 3100
+tcp        0      0 0.0.0.0:3100            0.0.0.0:*               LISTEN     
+tcp6       0      0 :::3100                 :::*                    LISTEN     
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $
+
+If the port is listening, but you still can't access Loki, consider the following additional checks:
+
+1. **Check Docker Network Configuration:**
+    - Ensure that the Docker container is connected to the correct network.
+    - Use `docker network inspect <network_name>` to verify the network settings.
+
+    @rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "faf2e9a11ddf2b19097039c9bd8e3c33bff7ef6ec6ab7f47a88a7e4f71c2af89",
+        "Created": "2024-10-14T16:18:14.205596627Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "ad7df2afcc73b98a09c28c0fe7d68a06cd0aac41cf62e64158f80aad58dd9dcd": {
+                "Name": "loki3",
+                "EndpointID": "6bb784ec4ef6468dfec7ecf948e867893682a2d7d26656d7c5ef2bac7ddb1574",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ 
+
+
+2. **Inspect Docker Container Logs:**
+    - Look for any errors or warnings in the container logs that might indicate network issues.
+    - Use `docker logs <container_id>` to view the logs.
+
+3. **Test Connectivity from Within the Container:**
+    - Use `docker exec -it <container_id> /bin/sh` to open a shell inside the container.
+    - Try to access the Loki service from within the container using `curl http://localhost:3100`.
+
+    @rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ curl http://localhost:3100
+404 page not found
+
+
+4. **Check Host Machine Firewall Rules:**
+    - Ensure that the host machine's firewall is not blocking the port.
+    - Use `sudo iptables -L` to list the firewall rules.
+
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ sudo iptables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination         
+DOCKER-USER  all  --  anywhere             anywhere            
+DOCKER-ISOLATION-STAGE-1  all  --  anywhere             anywhere            
+ACCEPT     all  --  anywhere             anywhere             ctstate RELATED,ESTABLISHED
+DOCKER     all  --  anywhere             anywhere            
+ACCEPT     all  --  anywhere             anywhere            
+ACCEPT     all  --  anywhere             anywhere            
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain DOCKER (1 references)
+target     prot opt source               destination         
+ACCEPT     tcp  --  anywhere             172.17.0.2           tcp dpt:3100
+
+Chain DOCKER-ISOLATION-STAGE-1 (1 references)
+target     prot opt source               destination         
+RETURN     all  --  anywhere             anywhere            
+
+Chain DOCKER-ISOLATION-STAGE-2 (0 references)
+target     prot opt source               destination         
+RETURN     all  --  anywhere             anywhere            
+
+Chain DOCKER-USER (1 references)
+target     prot opt source               destination         
+RETURN     all  --  anywhere             anywhere    
+
+5. **Verify Codespaces Configuration:**
+    - Double-check the Codespaces configuration to ensure that port forwarding is correctly set up.
+    - Ensure that there are no restrictions on the Codespaces environment that might block the port.
+
+6. **Review Loki Configuration File:**
+    - Ensure that the Loki configuration file (`loki-config.yaml`) is correctly set up to listen on port 3100.
+    - Look for the `server.http_listen_port` setting in the configuration file.
+
+By following these additional steps, you should be able to identify and resolve any issues preventing access to Loki on port 3100.
+
 If these steps don't resolve the issue, you may need to provide more detailed logs or configuration files for further troubleshooting.
+
+
+
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "faf2e9a11ddf2b19097039c9bd8e3c33bff7ef6ec6ab7f47a88a7e4f71c2af89",
+        "Created": "2024-10-14T16:18:14.205596627Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "ad7df2afcc73b98a09c28c0fe7d68a06cd0aac41cf62e64158f80aad58dd9dcd": {
+                "Name": "loki3",
+                "EndpointID": "6bb784ec4ef6468dfec7ecf948e867893682a2d7d26656d7c5ef2bac7ddb1574",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ curl http://localhost:3100
+404 page not found
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ docker ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+ad7df2afcc73   grafana/loki:2.7.0   "/usr/bin/loki -conf…"   19 minutes ago   Up 19 minutes   0.0.0.0:3100->3100/tcp, :::3100->3100/tcp   loki3
+@rifaterdemsahin ➜ /workspaces/loki/Code/loki (main) $ 
+
+
+gpt 4.o
+It seems like the issue you're facing with Loki in GitHub Codespaces is related to port forwarding and potentially Loki not being properly configured to handle the 404 error. Here’s what you can do to troubleshoot and resolve it:
+
+### Steps to Diagnose and Fix the Issue:
+
+1. **Ensure Port Forwarding is Correct**:
+   - In your Codespace, go to the **Ports tab**.
+   - Check if **port 3100** is listed there.
+   - If not, manually add port 3100 and set it as **Public**.
+
+2. **Check Docker Logs**:
+   - Review Loki's logs to see if it provides any clues about misconfigurations:
+     ```bash
+     docker logs loki3
+     ```
+
+3. **Verify Loki Configuration**:
+   - Loki might be running, but it could be returning 404 if the route you're accessing isn't available. Double-check the Loki config or any custom routes you may have added.
+   
+4. **Test Access Internally**:
+   - You can test if Loki is reachable from within the container:
+     ```bash
+     docker exec -it loki3 curl http://localhost:3100
+     ```
+   - This will help confirm if the service is running and responding internally.
+
+5. **Check Loki's `server.http_listen_port` Configuration**:
+   - Loki should be listening on port **3100**. Check if this is properly configured in Loki’s config file (`loki-config.yaml` or similar).
+
+6. **Inspect Docker Network**:
+   - Ensure Loki is accessible by checking the network configuration:
+     ```bash
+     docker network inspect bridge
+     ```
+   - This will help confirm if Loki is correctly connected to the network and is binded to the expected IP address.
+
+7. **Restart Loki**:
+   - If you make any changes, restart the Loki container:
+     ```bash
+     docker restart loki3
+     ```
+
+If after these steps the issue persists, it's worth looking at Loki's configuration file to ensure all necessary settings are correct for handling requests on port 3100.
